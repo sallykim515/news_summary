@@ -20,7 +20,7 @@ while resp.upper() != 'X':
         url = input('Enter BBC News article link: ')
         fn.summarize_article(url, 0.08)
 
-    else:
+    elif resp.upper() != 'X':
         resp = input("Invalid input. " + instruction)
 
 print('Thanks for using the news_summary. Bye now!')
