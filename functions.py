@@ -13,27 +13,39 @@ def get_soup(url):
 
 
 def get_article(url):
-
+    """
+    :param url: full web address of the article
+    :return: two objects - string title, string article content
+    """
     soup = get_soup(url)
     article_tag = soup.find('article')
 
     title = article_tag.find('h1', {'id': 'main-heading'}).get_text()
     txt_blocks = article_tag.find_all('div', {'data-component': 'text-block'})
 
-    article = title + '\n\n'
+    article_content = ''
     for blk in txt_blocks:
-        article += blk.get_text().strip() + '\n\n'
+        article_content += blk.get_text().strip() + '\n\n'
 
-    return article
+    return title, article_content
 
 
 def summarize_article(url, ratio):
-    article = get_article(url)
+    """
+    :param url: full web address of the article
+    :param ratio: percentage
+    :return:
+    """
+    title, content = get_article(url)
 
-    idx = article.find('\n\n')
+    # keep increasing the ratio until article summary returns
+    summarized_text = ''
+    while summarized_text == '':
+        ratio += 0.01
+        summarized_text = summarize(content, ratio=ratio)
 
-    print('Title: ' + article[: idx])
-    print('Summary: ' + '\n' + summarize(article, ratio=ratio) + '\n')
+    print('Title: ' + title)
+    print('Summary: ' + '\n' + summarized_text + '\n')
 
 
 def most_read_links(url):
